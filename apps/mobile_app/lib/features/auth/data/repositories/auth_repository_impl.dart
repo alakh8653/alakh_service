@@ -68,7 +68,8 @@ class AuthRepositoryImpl implements AuthRepository {
       await localDataSource.clearAll();
       return const Right(unit);
     } on Exception catch (e) {
-      // Clear local data regardless of remote failure.
+      // Intentionally clear local session even if the remote logout fails,
+      // so the user is always logged out locally (fail-safe logout).
       await localDataSource.clearAll();
       return Left(_mapException(e));
     }
