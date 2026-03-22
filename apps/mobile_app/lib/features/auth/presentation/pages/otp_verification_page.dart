@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/bloc.dart';
@@ -18,6 +19,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   String _otp = '';
   bool _canResend = false;
   int _countdown = 60;
+  Timer? _timer;
 
   @override
   void initState() {
@@ -25,15 +27,25 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     _startCountdown();
   }
 
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   void _startCountdown() {
-    Future.delayed(const Duration(seconds: 1), () {
-      if (!mounted) return;
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
       setState(() {
         if (_countdown > 0) {
           _countdown--;
-          _startCountdown();
         } else {
           _canResend = true;
+          timer.cancel();
         }
       });
     });
