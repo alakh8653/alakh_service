@@ -4,6 +4,8 @@ import '../bloc/dispute_bloc.dart';
 import '../bloc/dispute_event.dart';
 import '../bloc/dispute_state.dart';
 import '../widgets/dispute_card.dart';
+import '../../domain/entities/dispute.dart';
+import '../../domain/entities/dispute_status.dart';
 import 'dispute_details_page.dart';
 import 'create_dispute_page.dart';
 
@@ -61,9 +63,11 @@ class _MyDisputesPageState extends State<MyDisputesPage>
           if (state is DisputesLoaded) {
             final disputes = state.disputes;
             final active = disputes.where((d) =>
-                d.status.name != 'resolved' && d.status.name != 'closed').toList();
+                d.status != DisputeStatus.resolved &&
+                d.status != DisputeStatus.closed).toList();
             final resolved = disputes.where((d) =>
-                d.status.name == 'resolved' || d.status.name == 'closed').toList();
+                d.status == DisputeStatus.resolved ||
+                d.status == DisputeStatus.closed).toList();
 
             return TabBarView(
               controller: _tabController,
@@ -82,7 +86,7 @@ class _MyDisputesPageState extends State<MyDisputesPage>
 }
 
 class _DisputeList extends StatelessWidget {
-  final List disputes;
+  final List<Dispute> disputes;
   const _DisputeList({required this.disputes});
 
   @override
