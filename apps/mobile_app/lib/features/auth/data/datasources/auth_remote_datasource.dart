@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import '../models/models.dart';
+import 'auth_exceptions.dart';
 
 /// Abstract interface for remote authentication data source.
 abstract class AuthRemoteDataSource {
@@ -137,33 +138,18 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   void _checkStatusCode(http.Response response) {
     if (response.statusCode == 401) {
-      throw const _UnauthorizedException('Unauthorized');
+      throw const UnauthorizedException('Unauthorized');
     }
     if (response.statusCode == 422) {
       final json = jsonDecode(response.body) as Map<String, dynamic>;
-      throw _ValidationException(
+      throw ValidationException(
           json['message'] as String? ?? 'Validation error');
     }
     if (response.statusCode >= 500) {
-      throw const _ServerException('Server error');
+      throw const ServerException('Server error');
     }
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw _ServerException('Request failed: ${response.statusCode}');
+      throw ServerException('Request failed: ${response.statusCode}');
     }
   }
-}
-
-class _ServerException implements Exception {
-  final String message;
-  const _ServerException(this.message);
-}
-
-class _ValidationException implements Exception {
-  final String message;
-  const _ValidationException(this.message);
-}
-
-class _UnauthorizedException implements Exception {
-  final String message;
-  const _UnauthorizedException(this.message);
 }

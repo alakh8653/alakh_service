@@ -83,5 +83,8 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   }
 
   // Temporary in-memory store until flutter_secure_storage is wired up.
+  // WARNING: This store is shared across all instances and is NOT thread-safe
+  // across Dart isolates. Do NOT use in production — replace with
+  // FlutterSecureStorage as indicated by the TODO comments above.
   static final Map<String, String> _inMemoryStore = {};
 }

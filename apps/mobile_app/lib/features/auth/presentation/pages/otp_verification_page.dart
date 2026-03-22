@@ -18,7 +18,7 @@ class OtpVerificationPage extends StatefulWidget {
 class _OtpVerificationPageState extends State<OtpVerificationPage> {
   String _otp = '';
   bool _canResend = false;
-  int _countdown = 60;
+  int _resendCountdownSeconds = 60;
   Timer? _timer;
 
   @override
@@ -41,8 +41,8 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
         return;
       }
       setState(() {
-        if (_countdown > 0) {
-          _countdown--;
+        if (_resendCountdownSeconds > 0) {
+          _resendCountdownSeconds--;
         } else {
           _canResend = true;
           timer.cancel();
@@ -63,7 +63,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     // TODO: Implement resend OTP via your backend API.
     setState(() {
       _canResend = false;
-      _countdown = 60;
+      _resendCountdownSeconds = 60;
     });
     _startCountdown();
     ScaffoldMessenger.of(context).showSnackBar(
@@ -151,7 +151,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                         child: Text(
                           _canResend
                               ? 'Resend OTP'
-                              : 'Resend in ${_countdown}s',
+                              : 'Resend in ${_resendCountdownSeconds}s',
                         ),
                       ),
                     ],

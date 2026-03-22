@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'dart:io';
 import '../../domain/entities/entities.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../core/failures/failures.dart';
@@ -68,8 +69,9 @@ class AuthRepositoryImpl implements AuthRepository {
       await localDataSource.clearAll();
       return const Right(unit);
     } on Exception catch (e) {
-      // Intentionally clear local session even if the remote logout fails,
-      // so the user is always logged out locally (fail-safe logout).
+      // Always clear local session even if remote logout fails (fail-safe logout).
+      // This runs only when remoteDataSource.logout() throws — localDataSource.clearAll()
+      // in the try block above was not reached yet.
       await localDataSource.clearAll();
       return Left(_mapException(e));
     }
@@ -132,14 +134,18 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   Failure _mapException(Exception e) {
-    final message = e.toString();
-    if (message.contains('SocketException') ||
-        message.contains('NetworkException')) {
-      return NetworkFailure('No internet connection: $message');
+    if (e is UnauthorizedException) {
+      return UnauthorizedFailure(e.message);
     }
-    if (message.contains('Unauthorized')) {
-      return UnauthorizedFailure('Session expired. Please log in again.');
+    if (e is ValidationException) {
+      return ValidationFailure(e.message);
     }
-    return ServerFailure('An unexpected error occurred: $message');
+    if (e is ServerException) {
+      return ServerFailure(e.message);
+    }
+    if (e is SocketException) {
+      return const NetworkFailure('No internet connection. Please check your network.');
+    }
+    return ServerFailure('An unexpected error occurred: ${e.runtimeType}');
   }
 }
