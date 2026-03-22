@@ -142,10 +142,12 @@ class _ActiveJobView extends StatelessWidget {
         children: [
           DispatchStatusStepper(currentStatus: job.status),
           const SizedBox(height: 16),
+          // Customer name and phone are not carried by DispatchJob; show
+          // the customer ID as a reference until the full profile is loaded.
           CustomerInfoCard(
-            customerName: 'Customer',
+            customerName: 'Customer #${job.customerId.substring(0, 8)}',
             customerPhone: '',
-            serviceType: 'Service',
+            serviceType: 'Booking #${job.bookingId.substring(0, 8)}',
           ),
           const SizedBox(height: 16),
           DispatchActionButton(
