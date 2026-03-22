@@ -1,3 +1,5 @@
+library;
+
 export 'dispatch_assignment.dart';
 export 'dispatch_job.dart';
 export 'dispatch_location.dart';

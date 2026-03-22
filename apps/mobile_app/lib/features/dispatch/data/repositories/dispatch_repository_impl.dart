@@ -81,8 +81,9 @@ class DispatchRepositoryImpl implements DispatchRepository {
     try {
       await _remote.updateDispatchStatus(jobId, status);
       // Update cached job status if present.
-      final cached = await _local.getCachedActiveJob();
+      final DispatchJobModel? cached = await _local.getCachedActiveJob();
       if (cached != null && cached.id == jobId) {
+        // Dart promotes `cached` to non-nullable inside this block.
         await _local.cacheActiveJob(cached.copyWith(status: status));
       }
       return const Right(unit);

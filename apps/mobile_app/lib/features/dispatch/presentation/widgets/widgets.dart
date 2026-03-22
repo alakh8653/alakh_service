@@ -1,3 +1,5 @@
+library;
+
 export 'assignment_card.dart';
 export 'customer_info_card.dart';
 export 'dispatch_action_button.dart';

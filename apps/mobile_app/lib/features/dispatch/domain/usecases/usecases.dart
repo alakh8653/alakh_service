@@ -1,3 +1,5 @@
+library;
+
 export 'accept_dispatch_usecase.dart';
 export 'get_active_dispatch_usecase.dart';
 export 'get_dispatch_history_usecase.dart';
