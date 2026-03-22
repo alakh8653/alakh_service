@@ -121,16 +121,16 @@ class ReferralRepositoryImpl implements ReferralRepository {
   Future<Either<Failure, String>> generateShareContent(
       ReferralCode referralCode) async {
     // Share-content generation is done client-side; no network call needed.
-    try {
-      final content = _buildShareMessage(referralCode as ReferralCodeModel);
-      return Right(content);
-    } catch (_) {
-      // Fallback: use a simpler message if casting fails (e.g. mock entity).
-      final content =
+    final String content;
+    if (referralCode is ReferralCodeModel) {
+      content = _buildShareMessage(referralCode);
+    } else {
+      // Fallback for plain domain entity (e.g. in tests / mocks).
+      content =
           'Join me on Alakh Service and get a discount on your first booking! '
           'Use my referral code ${referralCode.code}: ${referralCode.deepLink}';
-      return Right(content);
     }
+    return Right(content);
   }
 
   @override

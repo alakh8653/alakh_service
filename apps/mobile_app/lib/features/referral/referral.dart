@@ -49,7 +49,8 @@ export 'data/models/referral_stats_model.dart';
 // Data – Data Sources
 // --------------------------------------------------------------------------
 export 'data/datasources/referral_local_datasource.dart';
-export 'data/datasources/referral_remote_datasource.dart';
+export 'data/datasources/referral_remote_datasource.dart'
+    show ReferralRemoteDataSource, ReferralRemoteDataSourceImpl, HttpClient;
 
 // --------------------------------------------------------------------------
 // Data – Repository Implementation

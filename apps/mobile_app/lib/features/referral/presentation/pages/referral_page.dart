@@ -35,6 +35,9 @@ class ReferralPage extends StatefulWidget {
 }
 
 class _ReferralPageState extends State<ReferralPage> {
+  /// Cached referral code so the share sheet can access it from the listener.
+  ReferralCode? _cachedCode;
+
   @override
   void initState() {
     super.initState();
@@ -67,18 +70,15 @@ class _ReferralPageState extends State<ReferralPage> {
       ),
       body: BlocConsumer<ReferralBloc, ReferralState>(
         listener: (context, state) {
-          if (state is ShareContentReady) {
-            // Show the share sheet once content is ready.
-            final bloc = context.read<ReferralBloc>();
+          if (state is ReferralCodeLoaded) {
+            // Cache the code so it is available when ShareContentReady fires.
+            _cachedCode = state.code;
+          } else if (state is ShareContentReady) {
+            final code = _cachedCode;
+            if (code == null) return; // Guard: code not yet loaded.
             ShareReferralSheet.show(
               context,
-              referralCode:
-                  (bloc.state is ReferralCodeLoaded)
-                      ? (bloc.state as ReferralCodeLoaded).code
-                      : (context
-                              .findAncestorStateOfType<_ReferralPageState>()
-                              ?._cachedCode ??
-                          (throw StateError('No code available'))),
+              referralCode: code,
               shareContent: state.content,
               onShareViaWhatsApp: () {
                 // TODO: Launch WhatsApp deep-link with share content.
@@ -128,8 +128,6 @@ class _ReferralPageState extends State<ReferralPage> {
     );
   }
 
-  // Cached code so it can be referenced inside the BlocConsumer listener.
-  dynamic get _cachedCode => null;
 }
 
 /// Internal scrollable body of the [ReferralPage].

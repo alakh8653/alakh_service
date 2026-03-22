@@ -43,14 +43,14 @@ class ReferralStatsCard extends StatelessWidget {
                 icon: Icons.people_outline_rounded,
                 color: theme.colorScheme.primary,
               ),
-              _Divider(),
+              _StatsDivider(),
               _StatColumn(
                 label: 'Pending',
                 value: stats.pending.toString(),
                 icon: Icons.hourglass_top_rounded,
                 color: Colors.orange,
               ),
-              _Divider(),
+              _StatsDivider(),
               _StatColumn(
                 label: 'Earned',
                 value: '${stats.currency} ${stats.totalEarnings.toStringAsFixed(0)}',
@@ -102,7 +102,7 @@ class _StatColumn extends StatelessWidget {
   }
 }
 
-class _Divider extends StatelessWidget {
+class _StatsDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
