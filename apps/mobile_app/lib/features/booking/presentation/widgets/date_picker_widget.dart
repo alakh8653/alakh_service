@@ -38,7 +38,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     final today = DateTime.now();
     _dates = List.generate(
       widget.dayCount,
-      (i) => DateTime(today.year, today.month, today.day + i),
+      (i) => today.add(Duration(days: i)),
     );
   }
 

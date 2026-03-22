@@ -74,9 +74,9 @@ class _MyBookingsPageState extends State<MyBookingsPage>
             return TabBarView(
               controller: _tabController,
               children: [
-                _BookingList(bookings: upcoming, emptyMessage: 'No upcoming bookings.'),
-                _BookingList(bookings: past, emptyMessage: 'No past bookings.'),
-                _BookingList(bookings: cancelled, emptyMessage: 'No cancelled bookings.'),
+                _BookingList(bookings: upcoming, emptyMessage: 'No upcoming bookings.', userId: widget.userId),
+                _BookingList(bookings: past, emptyMessage: 'No past bookings.', userId: widget.userId),
+                _BookingList(bookings: cancelled, emptyMessage: 'No cancelled bookings.', userId: widget.userId),
               ],
             );
           }
@@ -98,8 +98,13 @@ class _MyBookingsPageState extends State<MyBookingsPage>
 class _BookingList extends StatelessWidget {
   final List<Booking> bookings;
   final String emptyMessage;
+  final String userId;
 
-  const _BookingList({required this.bookings, required this.emptyMessage});
+  const _BookingList({
+    required this.bookings,
+    required this.emptyMessage,
+    required this.userId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +124,7 @@ class _BookingList extends StatelessWidget {
     }
     return RefreshIndicator(
       onRefresh: () async {
-        // Refresh handled by parent BLoC.
+        context.read<BookingBloc>().add(LoadUserBookings(userId));
       },
       child: ListView.builder(
         padding: const EdgeInsets.symmetric(vertical: 8),
