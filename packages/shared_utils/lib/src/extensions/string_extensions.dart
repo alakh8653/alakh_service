@@ -3,7 +3,7 @@ import '../helpers/string_helpers.dart';
 
 /// Convenient extension methods on [String].
 extension StringExtensions on String {
-  /// Returns this string with the first letter capitalised and the rest
+  /// Returns this string with the first letter capitalized and the rest
   /// lowercased.
   String capitalize() => StringHelpers.capitalize(this);
 

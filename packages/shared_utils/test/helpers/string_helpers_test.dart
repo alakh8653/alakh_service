@@ -3,7 +3,7 @@ import 'package:shared_utils/shared_utils.dart';
 
 void main() {
   group('StringHelpers.capitalize', () {
-    test('capitalises first letter', () {
+    test('capitalizes first letter', () {
       expect(StringHelpers.capitalize('hello'), 'Hello');
     });
 
@@ -21,7 +21,7 @@ void main() {
   });
 
   group('StringHelpers.titleCase', () {
-    test('capitalises each word', () {
+    test('capitalizes each word', () {
       expect(StringHelpers.titleCase('hello world'), 'Hello World');
     });
 

@@ -2,7 +2,7 @@
 class StringHelpers {
   StringHelpers._();
 
-  /// Capitalises the first character of [s] and lowercases the rest.
+  /// Capitalizes the first character of [s] and lowercases the rest.
   ///
   /// Returns an empty string when [s] is empty.
   static String capitalize(String s) {
@@ -10,7 +10,7 @@ class StringHelpers {
     return s[0].toUpperCase() + s.substring(1).toLowerCase();
   }
 
-  /// Converts [s] to title case (each word capitalised).
+  /// Converts [s] to title case (each word capitalized).
   ///
   /// Example: `"hello world"` → `"Hello World"`
   static String titleCase(String s) =>
