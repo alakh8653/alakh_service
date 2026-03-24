@@ -1,0 +1,36 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Development",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define=API_BASE_URL=http://10.0.2.2:3000/api/v1",
+        "--dart-define=WS_BASE_URL=http://10.0.2.2:3000"
+      ]
+    },
+    {
+      "name": "Staging",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define=API_BASE_URL=https://staging-api.alakhservice.com/api/v1",
+        "--dart-define=WS_BASE_URL=https://staging-api.alakhservice.com"
+      ]
+    },
+    {
+      "name": "Production",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define=API_BASE_URL=https://api.alakhservice.com/api/v1",
+        "--dart-define=WS_BASE_URL=https://api.alakhservice.com",
+        "--dart-define=dart.vm.product=true"
+      ]
+    }
+  ]
+}

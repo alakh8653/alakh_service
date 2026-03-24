@@ -1,0 +1,19 @@
+name: Backend Deploy
+
+on:
+  push:
+    branches: [main]
+    paths: ['backend/**']
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and push Docker image
+        # TODO: Configure actual container registry (ECR/GCR/Docker Hub)
+        run: echo "Build and push to container registry"
+      - name: Deploy to staging
+        # TODO: Configure actual deployment (ECS/Cloud Run/K8s)
+        run: echo "Deploy to staging environment"

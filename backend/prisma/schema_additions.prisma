@@ -1,0 +1,136 @@
+// Supplementary Prisma schema — missing models not present in BE-1 (PR #13).
+// Merge these additions into backend/prisma/schema.prisma once all PRs are combined.
+//
+// Added models: Dispatch, LocationHistory, ComplianceRequirement, SafetyReport
+// Added enums:  DispatchStatus, WalletTxnType, ReportStatus
+
+// ============================================================
+// ENUMS (additions)
+// ============================================================
+
+enum DispatchStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  EN_ROUTE
+  ARRIVED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum WalletTxnType {
+  CREDIT
+  DEBIT
+  REFUND
+  REFERRAL_REWARD
+  CASHBACK
+}
+
+enum ReportStatus {
+  PENDING
+  UNDER_REVIEW
+  RESOLVED
+  DISMISSED
+}
+
+// ============================================================
+// DISPATCH
+// ============================================================
+
+model Dispatch {
+  id                 String         @id @default(uuid())
+  bookingId          String
+  staffId            String?
+  customerId         String
+  shopId             String
+  status             DispatchStatus @default(PENDING)
+  assignedAt         DateTime       @default(now())
+  acceptedAt         DateTime?
+  startedAt          DateTime?
+  arrivedAt          DateTime?
+  completedAt        DateTime?
+  cancelledAt        DateTime?
+  staffLatitude      Float?
+  staffLongitude     Float?
+  destLatitude       Float
+  destLongitude      Float
+  estimatedArrival   DateTime?
+  actualDuration     Int?
+  rejectionReason    String?
+  cancellationReason String?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  locationHistory LocationHistory[]
+
+  @@index([bookingId])
+  @@index([staffId])
+  @@index([customerId])
+  @@index([shopId])
+  @@index([status])
+  @@map("dispatches")
+}
+
+// ============================================================
+// LOCATION HISTORY
+// ============================================================
+
+model LocationHistory {
+  id         String   @id @default(uuid())
+  dispatchId String
+  latitude   Float
+  longitude  Float
+  heading    Float?
+  speed      Float?
+  accuracy   Float?
+  recordedAt DateTime @default(now())
+
+  dispatch Dispatch @relation(fields: [dispatchId], references: [id])
+
+  @@index([dispatchId])
+  @@index([recordedAt])
+  @@map("location_history")
+}
+
+// ============================================================
+// COMPLIANCE REQUIREMENT
+// ============================================================
+
+model ComplianceRequirement {
+  id                   String   @id @default(uuid())
+  type                 String
+  name                 String
+  description          String?
+  applicableCategories String[]
+  applicableCities     String[]
+  isRequired           Boolean  @default(true)
+  validityPeriodDays   Int?
+  isActive             Boolean  @default(true)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([isActive])
+  @@map("compliance_requirements")
+}
+
+// ============================================================
+// SAFETY REPORT
+// ============================================================
+
+model SafetyReport {
+  id             String       @id @default(uuid())
+  reportedBy     String
+  reportedUserId String
+  type           String
+  description    String
+  status         ReportStatus @default(PENDING)
+  resolvedAt     DateTime?
+  resolvedBy     String?
+  resolution     String?
+  createdAt      DateTime     @default(now())
+
+  @@index([reportedUserId])
+  @@index([status])
+  @@map("safety_reports")
+}
