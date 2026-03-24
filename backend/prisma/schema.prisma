@@ -1,0 +1,499 @@
+// This is your Prisma schema file for the alakh_service backend.
+// It covers: Payments, Reviews, Chat, Notifications (BE-4 modules).
+// Run `npx prisma generate` to generate the Prisma client.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  CUSTOMER
+  SHOP_OWNER
+  ADMIN
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+  CANCELLED
+}
+
+enum PaymentMethodType {
+  CARD
+  UPI
+  NET_BANKING
+  WALLET
+  CASH
+}
+
+enum RefundStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PROCESSED
+}
+
+enum SettlementStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum ReviewReportReason {
+  SPAM
+  INAPPROPRIATE
+  FAKE
+  HARASSMENT
+  OTHER
+}
+
+enum ConversationType {
+  DIRECT
+  BOOKING
+  SUPPORT
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  FILE
+  VOICE
+  LOCATION
+  BOOKING_LINK
+}
+
+enum NotificationCategory {
+  TRANSACTIONAL
+  PROMOTIONAL
+  SOCIAL
+  SYSTEM
+}
+
+enum DeviceType {
+  ANDROID
+  IOS
+  WEB
+}
+
+// ─── Core models (stubs for cross-module FKs) ────────────────────────────────
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  phone     String?  @unique
+  name      String
+  role      UserRole @default(CUSTOMER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Payment relations
+  payments       Payment[]
+  paymentMethods PaymentMethod[]
+  refunds        Refund[]
+  walletTransactions WalletTransaction[]
+
+  // Review relations
+  reviews        Review[]
+  reviewReports  ReviewReport[]
+  reviewHelpful  ReviewHelpful[]
+
+  // Chat relations
+  conversations  ConversationParticipant[]
+  messages       Message[]
+  conversationReports ConversationReport[]
+
+  // Notification relations
+  notifications        Notification[]
+  notificationPreferences NotificationPreference[]
+  fcmTokens            FCMToken[]
+}
+
+model Shop {
+  id          String   @id @default(uuid())
+  ownerId     String
+  name        String
+  avgRating   Float    @default(0)
+  totalReviews Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  payments     Payment[]
+  settlements  Settlement[]
+  bankAccounts BankAccount[]
+  reviews      Review[]
+}
+
+model ServiceBooking {
+  id          String        @id @default(uuid())
+  customerId  String
+  shopId      String
+  serviceId   String
+  status      BookingStatus @default(PENDING)
+  totalAmount Float
+  taxAmount   Float         @default(0)
+  discountAmount Float      @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  payment     Payment?
+  review      Review?
+  conversation Conversation?
+}
+
+// ─── Payments ────────────────────────────────────────────────────────────────
+
+model Payment {
+  id                String        @id @default(uuid())
+  bookingId         String        @unique
+  userId            String
+  shopId            String
+  amount            Float
+  taxAmount         Float         @default(0)
+  platformFee       Float         @default(0)
+  netAmount         Float
+  currency          String        @default("INR")
+  status            PaymentStatus @default(PENDING)
+  method            PaymentMethodType?
+  razorpayOrderId   String?       @unique
+  razorpayPaymentId String?       @unique
+  transactionId     String?
+  gatewayResponse   Json?
+  idempotencyKey    String?       @unique
+  notes             String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  booking     ServiceBooking @relation(fields: [bookingId], references: [id])
+  user        User           @relation(fields: [userId], references: [id])
+  shop        Shop           @relation(fields: [shopId], references: [id])
+  refunds     Refund[]
+  settlementItems SettlementItem[]
+
+  @@index([userId])
+  @@index([shopId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model PaymentMethod {
+  id        String            @id @default(uuid())
+  userId    String
+  type      PaymentMethodType
+  token     String            // tokenized reference from gateway
+  last4     String?
+  brand     String?           // Visa, Mastercard, etc.
+  isDefault Boolean           @default(false)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model Refund {
+  id          String       @id @default(uuid())
+  paymentId   String
+  userId      String
+  amount      Float
+  reason      String
+  status      RefundStatus @default(PENDING)
+  razorpayRefundId String?
+  adminNote   String?
+  resolvedAt  DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  payment Payment @relation(fields: [paymentId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@index([paymentId])
+  @@index([userId])
+  @@index([status])
+}
+
+model Settlement {
+  id          String           @id @default(uuid())
+  shopId      String
+  amount      Float
+  platformFee Float
+  netAmount   Float
+  status      SettlementStatus @default(PENDING)
+  bankAccountId String?
+  processedAt DateTime?
+  notes       String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  shop        Shop             @relation(fields: [shopId], references: [id])
+  bankAccount BankAccount?     @relation(fields: [bankAccountId], references: [id])
+  items       SettlementItem[]
+
+  @@index([shopId])
+  @@index([status])
+}
+
+model SettlementItem {
+  id           String @id @default(uuid())
+  settlementId String
+  paymentId    String
+
+  settlement Settlement @relation(fields: [settlementId], references: [id])
+  payment    Payment    @relation(fields: [paymentId], references: [id])
+}
+
+model BankAccount {
+  id                String   @id @default(uuid())
+  shopId            String
+  accountHolderName String
+  accountNumber     String
+  ifscCode          String
+  bankName          String
+  isDefault         Boolean  @default(false)
+  isVerified        Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  shop        Shop         @relation(fields: [shopId], references: [id])
+  settlements Settlement[]
+
+  @@index([shopId])
+}
+
+model WalletTransaction {
+  id          String   @id @default(uuid())
+  userId      String
+  amount      Float
+  type        String   // CREDIT | DEBIT
+  description String
+  referenceId String?
+  balanceAfter Float
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+// ─── Reviews ─────────────────────────────────────────────────────────────────
+
+model Review {
+  id         String   @id @default(uuid())
+  bookingId  String   @unique
+  userId     String
+  shopId     String
+  rating     Int      // 1–5
+  title      String?
+  text       String
+  photos     String[] // S3 URLs
+  isVerified Boolean  @default(false)
+  isHidden   Boolean  @default(false)
+  helpfulCount Int    @default(0)
+  deletedAt  DateTime?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  booking  ServiceBooking  @relation(fields: [bookingId], references: [id])
+  user     User            @relation(fields: [userId], references: [id])
+  shop     Shop            @relation(fields: [shopId], references: [id])
+  response ReviewResponse?
+  reports  ReviewReport[]
+  helpful  ReviewHelpful[]
+
+  @@index([shopId])
+  @@index([userId])
+  @@index([rating])
+  @@index([createdAt])
+}
+
+model ReviewResponse {
+  id        String   @id @default(uuid())
+  reviewId  String   @unique
+  shopId    String
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  review Review @relation(fields: [reviewId], references: [id])
+}
+
+model ReviewReport {
+  id         String             @id @default(uuid())
+  reviewId   String
+  reporterId String
+  reason     ReviewReportReason
+  details    String?
+  isResolved Boolean            @default(false)
+  resolvedAt DateTime?
+  adminNote  String?
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  review   Review @relation(fields: [reviewId], references: [id])
+  reporter User   @relation(fields: [reporterId], references: [id])
+
+  @@index([reviewId])
+  @@index([isResolved])
+}
+
+model ReviewHelpful {
+  id        String   @id @default(uuid())
+  reviewId  String
+  userId    String
+  createdAt DateTime @default(now())
+
+  review Review @relation(fields: [reviewId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@unique([reviewId, userId])
+}
+
+// ─── Chat ────────────────────────────────────────────────────────────────────
+
+model Conversation {
+  id            String           @id @default(uuid())
+  type          ConversationType @default(DIRECT)
+  bookingId     String?          @unique
+  lastMessageId String?
+  lastMessageAt DateTime?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  booking      ServiceBooking?          @relation(fields: [bookingId], references: [id])
+  participants ConversationParticipant[]
+  messages     Message[]
+  reports      ConversationReport[]
+
+  @@index([lastMessageAt])
+}
+
+model ConversationParticipant {
+  id             String    @id @default(uuid())
+  conversationId String
+  userId         String
+  lastReadAt     DateTime?
+  isArchived     Boolean   @default(false)
+  joinedAt       DateTime  @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id])
+  user         User         @relation(fields: [userId], references: [id])
+
+  @@unique([conversationId, userId])
+  @@index([userId])
+}
+
+model Message {
+  id             String      @id @default(uuid())
+  conversationId String
+  senderId       String
+  content        String?
+  type           MessageType @default(TEXT)
+  metadata       Json?
+  deletedAt      DateTime?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  conversation Conversation @relation(fields: [conversationId], references: [id])
+  sender       User         @relation(fields: [senderId], references: [id])
+  attachments  MessageAttachment[]
+
+  @@index([conversationId, createdAt])
+  @@index([senderId])
+}
+
+model MessageAttachment {
+  id        String  @id @default(uuid())
+  messageId String
+  url       String
+  type      String  // image | file | voice
+  name      String?
+  size      Int?
+  mimeType  String?
+  thumbnail String?
+
+  message Message @relation(fields: [messageId], references: [id])
+}
+
+model ConversationReport {
+  id             String   @id @default(uuid())
+  conversationId String
+  reporterId     String
+  reason         String
+  details        String?
+  isResolved     Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id])
+  reporter     User         @relation(fields: [reporterId], references: [id])
+}
+
+// ─── Notifications ───────────────────────────────────────────────────────────
+
+model Notification {
+  id         String               @id @default(uuid())
+  userId     String
+  type       String
+  category   NotificationCategory @default(TRANSACTIONAL)
+  title      String
+  body       String
+  data       Json?
+  imageUrl   String?
+  actionUrl  String?
+  isRead     Boolean              @default(false)
+  readAt     DateTime?
+  createdAt  DateTime             @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
+  @@index([category])
+}
+
+model NotificationPreference {
+  id           String               @id @default(uuid())
+  userId       String
+  category     NotificationCategory
+  pushEnabled  Boolean              @default(true)
+  emailEnabled Boolean              @default(true)
+  smsEnabled   Boolean              @default(false)
+  inAppEnabled Boolean              @default(true)
+  updatedAt    DateTime             @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, category])
+}
+
+model FCMToken {
+  id         String     @id @default(uuid())
+  userId     String
+  token      String     @unique
+  deviceType DeviceType
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
