@@ -1,0 +1,154 @@
+name: alakh_service
+
+packages:
+  - apps/*
+  - packages/*
+
+ide:
+  intellij:
+    enabled: true
+  vscode:
+    enabled: true
+
+sdkPath: auto
+
+command:
+  bootstrap:
+    usePubspecOverrides: true
+
+scripts:
+  clean:
+    run: melos exec -- flutter clean
+    description: Clean all packages and apps
+
+  get:
+    run: melos exec -- flutter pub get
+    description: Run flutter pub get in all packages and apps
+
+  analyze:
+    run: melos exec -- flutter analyze --no-fatal-infos
+    description: Run flutter analyze across all packages and apps
+
+  format:
+    run: melos exec -- dart format . --set-exit-if-changed
+    description: Run dart format across all packages and apps
+
+  format:fix:
+    run: melos exec -- dart format .
+    description: Run dart format and fix formatting across all packages and apps
+
+  test:
+    run: melos exec --dir-exists=test -- flutter test --coverage
+    description: Run tests in all packages with coverage
+
+  test:unit:
+    run: >
+      melos exec --dir-exists=test --
+      flutter test test/unit --coverage
+    description: Run only unit tests
+
+  test:widget:
+    run: >
+      melos exec --dir-exists=test --
+      flutter test test/widget --coverage
+    description: Run only widget tests
+
+  test:integration:
+    run: >
+      melos exec --dir-exists=integration_test --
+      flutter test integration_test --coverage
+    description: Run integration tests
+
+  build:runner:
+    run: >
+      melos exec --depends-on=build_runner --
+      dart run build_runner build --delete-conflicting-outputs
+    description: Run build_runner in all packages that need it
+
+  build:runner:watch:
+    run: >
+      melos exec --depends-on=build_runner --
+      dart run build_runner watch --delete-conflicting-outputs
+    description: Run build_runner in watch mode
+
+  gen:l10n:
+    run: >
+      melos exec --dir-exists=lib/l10n --
+      flutter gen-l10n
+    description: Generate localizations in all apps
+
+  build:android:dev:
+    run: >
+      melos exec --scope=mobile_app --
+      flutter build apk --flavor dev --dart-define=FLAVOR=dev
+    description: Build Android APK (dev flavor)
+
+  build:android:staging:
+    run: >
+      melos exec --scope=mobile_app --
+      flutter build apk --flavor staging --dart-define=FLAVOR=staging
+    description: Build Android APK (staging flavor)
+
+  build:android:prod:
+    run: >
+      melos exec --scope=mobile_app --
+      flutter build apk --flavor production --dart-define=FLAVOR=production
+    description: Build Android APK (production flavor)
+
+  build:android:aab:prod:
+    run: >
+      melos exec --scope=mobile_app --
+      flutter build appbundle --flavor production --dart-define=FLAVOR=production
+    description: Build Android App Bundle (production)
+
+  build:ios:dev:
+    run: >
+      melos exec --scope=mobile_app --
+      flutter build ios --flavor dev --dart-define=FLAVOR=dev --no-codesign
+    description: Build iOS (dev flavor)
+
+  build:ios:prod:
+    run: >
+      melos exec --scope=mobile_app --
+      flutter build ios --flavor production --dart-define=FLAVOR=production --no-codesign
+    description: Build iOS (production flavor)
+
+  build:web:shop:
+    run: >
+      melos exec --scope=shop_web --
+      flutter build web --dart-define=FLAVOR=production
+    description: Build shop_web for production
+
+  build:web:admin:
+    run: >
+      melos exec --scope=admin_web --
+      flutter build web --dart-define=FLAVOR=production
+    description: Build admin_web for production
+
+  outdated:
+    run: melos exec -- flutter pub outdated
+    description: Check outdated dependencies in all packages
+
+  upgrade:
+    run: melos exec -- flutter pub upgrade
+    description: Upgrade dependencies in all packages
+
+  upgrade:major:
+    run: melos exec -- flutter pub upgrade --major-versions
+    description: Upgrade to major dependency versions
+
+  loc:
+    run: |
+      echo "=== Lines of Code ===" && \
+      find . -name "*.dart" \
+        -not -path "*/.*" \
+        -not -path "*/build/*" \
+        -not -name "*.g.dart" \
+        -not -name "*.freezed.dart" \
+        -not -name "*.gr.dart" | \
+      xargs wc -l | tail -1
+    description: Count lines of code (excluding generated files)
+
+  graph:
+    run: melos exec -- dart pub deps --style=tree
+    description: Generate dependency tree for all packages

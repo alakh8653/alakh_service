@@ -1,0 +1,12 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/alakh8653/alakh_service/discussions
+    about: Ask questions or start a discussion about AlakhService
+  - name: 📖 Documentation
+    url: https://github.com/alakh8653/alakh_service/blob/main/README.md
+    about: Read the project documentation
+  - name: 🔒 Security Vulnerability
+    url: https://github.com/alakh8653/alakh_service/security/advisories/new
+    about: Report a security vulnerability privately

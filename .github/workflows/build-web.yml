@@ -1,0 +1,162 @@
+name: Build Web
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      app:
+        description: "App to build"
+        required: true
+        default: "both"
+        type: choice
+        options:
+          - shop_web
+          - admin_web
+          - both
+      deploy:
+        description: "Deploy after build?"
+        required: false
+        default: "false"
+        type: boolean
+
+permissions:
+  contents: read
+
+env:
+  FLUTTER_VERSION: "3.22.2"
+  PUB_CACHE: ${{ github.workspace }}/.pub-cache
+
+jobs:
+  # ============================================================
+  # Build shop_web
+  # ============================================================
+  build-shop-web:
+    name: Build shop_web
+    runs-on: ubuntu-latest
+    if: >
+      github.event.inputs.app == 'shop_web' ||
+      github.event.inputs.app == 'both' ||
+      github.event_name != 'workflow_dispatch'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ env.PUB_CACHE }}
+            ~/.pub-cache
+          key: pub-${{ runner.os }}-${{ hashFiles('**/pubspec.yaml', '**/pubspec.lock') }}
+          restore-keys: |
+            pub-${{ runner.os }}-
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install Melos
+        run: dart pub global activate melos
+
+      - name: Bootstrap workspace
+        run: melos bootstrap
+
+      - name: Run code generation
+        run: melos run build:runner
+
+      - name: Build shop_web
+        working-directory: apps/shop_web
+        run: flutter build web --dart-define=FLAVOR=production --release
+
+      - name: Upload shop_web artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: shop-web-build
+          path: apps/shop_web/build/web
+          retention-days: 30
+
+      - name: Deploy shop_web to Firebase Hosting
+        if: >
+          (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'true') ||
+          (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/'))
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SHOP }}
+          channelId: live
+          projectId: ${{ secrets.FIREBASE_PROJECT_ID_SHOP }}
+          entryPoint: apps/shop_web
+        env:
+          FIREBASE_CLI_PREVIEWS: hostingchannels
+
+  # ============================================================
+  # Build admin_web
+  # ============================================================
+  build-admin-web:
+    name: Build admin_web
+    runs-on: ubuntu-latest
+    if: >
+      github.event.inputs.app == 'admin_web' ||
+      github.event.inputs.app == 'both' ||
+      github.event_name != 'workflow_dispatch'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ env.PUB_CACHE }}
+            ~/.pub-cache
+          key: pub-${{ runner.os }}-${{ hashFiles('**/pubspec.yaml', '**/pubspec.lock') }}
+          restore-keys: |
+            pub-${{ runner.os }}-
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install Melos
+        run: dart pub global activate melos
+
+      - name: Bootstrap workspace
+        run: melos bootstrap
+
+      - name: Run code generation
+        run: melos run build:runner
+
+      - name: Build admin_web
+        working-directory: apps/admin_web
+        run: flutter build web --dart-define=FLAVOR=production --release
+
+      - name: Upload admin_web artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: admin-web-build
+          path: apps/admin_web/build/web
+          retention-days: 30
+
+      - name: Deploy admin_web to Firebase Hosting
+        if: >
+          (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'true') ||
+          (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/'))
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ADMIN }}
+          channelId: live
+          projectId: ${{ secrets.FIREBASE_PROJECT_ID_ADMIN }}
+          entryPoint: apps/admin_web
+        env:
+          FIREBASE_CLI_PREVIEWS: hostingchannels

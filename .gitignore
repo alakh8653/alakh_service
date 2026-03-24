@@ -1,0 +1,146 @@
+# ==============================================================================
+# AlakhService — Root .gitignore
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Dart / Flutter
+# ------------------------------------------------------------------------------
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+*.class
+
+# Dart generated files — do NOT commit generated code
+*.g.dart
+*.freezed.dart
+*.gr.dart
+*.config.dart
+*.mocks.dart
+
+# Coverage
+coverage/
+lcov.info
+*.lcov
+
+# Pub cache
+.pub/
+.pub-cache/
+
+# Flutter SDK
+.flutter-version
+
+# Melos
+.melos_tool/
+
+# FVM
+.fvm/
+.fvmrc-local
+
+# ------------------------------------------------------------------------------
+# Android
+# ------------------------------------------------------------------------------
+apps/mobile_app/android/.gradle/
+apps/mobile_app/android/captures/
+apps/mobile_app/android/gradlew
+apps/mobile_app/android/gradlew.bat
+apps/mobile_app/android/local.properties
+apps/mobile_app/android/GeneratedPluginRegistrant.java
+apps/mobile_app/android/key.properties
+*.jks
+*.keystore
+
+# ------------------------------------------------------------------------------
+# iOS
+# ------------------------------------------------------------------------------
+apps/mobile_app/ios/.symlinks/
+apps/mobile_app/ios/Flutter/App.framework
+apps/mobile_app/ios/Flutter/Flutter.framework
+apps/mobile_app/ios/Flutter/Flutter.podspec
+apps/mobile_app/ios/Flutter/Generated.xcconfig
+apps/mobile_app/ios/Flutter/ephemeral/
+apps/mobile_app/ios/Flutter/flutter_export_environment.sh
+apps/mobile_app/ios/Pods/
+apps/mobile_app/ios/Runner.xcworkspace/
+*.xcuserdata/
+
+# ------------------------------------------------------------------------------
+# Web
+# ------------------------------------------------------------------------------
+apps/shop_web/build/
+apps/admin_web/build/
+
+# ------------------------------------------------------------------------------
+# Environment / Secrets
+# ------------------------------------------------------------------------------
+.env
+.env.*
+*.env
+!*.env.example
+google-services.json
+GoogleService-Info.plist
+firebase_options.dart
+lib/firebase_options.dart
+
+# ------------------------------------------------------------------------------
+# IDEs
+# ------------------------------------------------------------------------------
+
+# IntelliJ / Android Studio
+.idea/
+*.iml
+*.ipr
+*.iws
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/assetWizardSettings.xml
+.idea/dictionaries
+.idea/libraries
+.idea/caches
+
+# VS Code
+.vscode/launch.json
+.vscode/tasks.json
+.vscode/settings.json
+!.vscode/extensions.json
+
+# Xcode
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcworkspace/contents.xcworkspacedata
+/*.gcno
+**/xcshareddata/WorkspaceSettings.xcsettings
+
+# ------------------------------------------------------------------------------
+# OS files
+# ------------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ------------------------------------------------------------------------------
+# Logs
+# ------------------------------------------------------------------------------
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ------------------------------------------------------------------------------
+# pubspec.lock — keep for apps, ignore for packages
+# ------------------------------------------------------------------------------
+packages/*/pubspec.lock
+
+# ------------------------------------------------------------------------------
+# Test artifacts
+# ------------------------------------------------------------------------------
+test-results/
+test_driver/

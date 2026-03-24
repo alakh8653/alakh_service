@@ -1,0 +1,43 @@
+# CODEOWNERS
+# Each line is a file pattern followed by one or more owners.
+# The last matching pattern takes precedence.
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default: repo owner is responsible for everything
+*                               @alakh8653
+
+# Root-level configuration and documentation
+/*.yaml                         @alakh8653
+/*.yml                          @alakh8653
+/*.md                           @alakh8653
+/Makefile                       @alakh8653
+/pubspec.yaml                   @alakh8653
+
+# CI/CD workflows
+/.github/                       @alakh8653
+/.github/workflows/             @alakh8653
+
+# Mobile App
+/apps/mobile_app/               @alakh8653
+
+# Shop Web Dashboard
+/apps/shop_web/                 @alakh8653
+
+# Admin Web Panel
+/apps/admin_web/                @alakh8653
+
+# Shared Packages
+/packages/                      @alakh8653
+/packages/shared_models/        @alakh8653
+/packages/shared_utils/         @alakh8653
+/packages/api_client/           @alakh8653
+/packages/ui_kit/               @alakh8653
+/packages/auth_module/          @alakh8653
+/packages/realtime_client/      @alakh8653
+/packages/analytics_module/     @alakh8653
+/packages/notification_module/  @alakh8653
+
+# Documentation
+/docs/                          @alakh8653
+/ARCHITECTURE.md                @alakh8653
+/CONTRIBUTING.md                @alakh8653
