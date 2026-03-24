@@ -1,0 +1,173 @@
+version: 2
+updates:
+  # Dart/Flutter pub packages
+  - package-ecosystem: pub
+    directory: /apps/mobile_app
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: "Asia/Kolkata"
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+      - mobile
+    reviewers:
+      - alakh8653
+    commit-message:
+      prefix: "chore(deps)"
+      include: scope
+
+  - package-ecosystem: pub
+    directory: /apps/shop_web
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: "Asia/Kolkata"
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+      - shop-web
+    reviewers:
+      - alakh8653
+    commit-message:
+      prefix: "chore(deps)"
+      include: scope
+
+  - package-ecosystem: pub
+    directory: /apps/admin_web
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: "Asia/Kolkata"
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+      - admin-web
+    reviewers:
+      - alakh8653
+    commit-message:
+      prefix: "chore(deps)"
+      include: scope
+
+  - package-ecosystem: pub
+    directory: /packages/shared_models
+    schedule:
+      interval: weekly
+      day: tuesday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - packages
+    commit-message:
+      prefix: "chore(deps)"
+      include: scope
+
+  - package-ecosystem: pub
+    directory: /packages/shared_utils
+    schedule:
+      interval: weekly
+      day: tuesday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - packages
+    commit-message:
+      prefix: "chore(deps)"
+      include: scope
+
+  - package-ecosystem: pub
+    directory: /packages/api_client
+    schedule:
+      interval: weekly
+      day: tuesday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - packages
+    commit-message:
+      prefix: "chore(deps)"
+      include: scope
+
+  - package-ecosystem: pub
+    directory: /packages/ui_kit
+    schedule:
+      interval: weekly
+      day: tuesday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - packages
+    commit-message:
+      prefix: "chore(deps)"
+      include: scope
+
+  - package-ecosystem: pub
+    directory: /packages/auth_module
+    schedule:
+      interval: weekly
+      day: tuesday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - packages
+    commit-message:
+      prefix: "chore(deps)"
+      include: scope
+
+  - package-ecosystem: pub
+    directory: /packages/realtime_client
+    schedule:
+      interval: weekly
+      day: tuesday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - packages
+    commit-message:
+      prefix: "chore(deps)"
+      include: scope
+
+  - package-ecosystem: pub
+    directory: /packages/analytics_module
+    schedule:
+      interval: weekly
+      day: tuesday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - packages
+    commit-message:
+      prefix: "chore(deps)"
+      include: scope
+
+  - package-ecosystem: pub
+    directory: /packages/notification_module
+    schedule:
+      interval: weekly
+      day: tuesday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - packages
+    commit-message:
+      prefix: "chore(deps)"
+      include: scope
+
+  # GitHub Actions
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: "Asia/Kolkata"
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+      - github-actions
+    commit-message:
+      prefix: "chore(deps)"
+      include: scope

@@ -1,0 +1,9 @@
+name: alakh_service_workspace
+description: Root workspace pubspec for the alakh_service monorepo.
+publish_to: none
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dev_dependencies:
+  melos: ^6.1.0
