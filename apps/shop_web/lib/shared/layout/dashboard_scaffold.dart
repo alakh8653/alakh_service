@@ -57,6 +57,7 @@ class DashboardScaffold extends StatefulWidget {
 
 class _DashboardScaffoldState extends State<DashboardScaffold> {
   bool _sidebarCollapsed = false;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _toggleCollapse() => setState(() => _sidebarCollapsed = !_sidebarCollapsed);
 
@@ -76,8 +77,9 @@ class _DashboardScaffoldState extends State<DashboardScaffold> {
   Widget build(BuildContext context) {
     return ResponsiveLayout(
       mobile: _MobileScaffold(
+        scaffoldKey: _scaffoldKey,
         topBar: _buildTopBar(
-          onMenuTap: () => Scaffold.of(context).openDrawer(),
+          onMenuTap: () => _scaffoldKey.currentState?.openDrawer(),
         ),
         sidebar: ShopSidebar(
           selectedIndex: widget.selectedNavIndex,
@@ -148,8 +150,10 @@ class _MobileScaffold extends StatelessWidget {
     required this.topBar,
     required this.sidebar,
     required this.child,
+    required this.scaffoldKey,
   });
 
+  final GlobalKey<ScaffoldState> scaffoldKey;
   final ShopTopBar topBar;
   final ShopSidebar sidebar;
   final Widget child;
@@ -157,6 +161,7 @@ class _MobileScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: topBar,
       drawer: Drawer(
         width: 240,

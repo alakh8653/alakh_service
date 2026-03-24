@@ -67,10 +67,10 @@ class ExportButton extends StatelessWidget {
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          children: const [
-            Icon(Icons.download_rounded, size: 18),
-            SizedBox(width: 6),
-            Text('Export', style: TextStyle(fontWeight: FontWeight.w500)),
+          children: [
+            const Icon(Icons.download_rounded, size: 18),
+            const SizedBox(width: 6),
+            const Text('Export', style: TextStyle(fontWeight: FontWeight.w500)),
           ],
         ),
       ),
