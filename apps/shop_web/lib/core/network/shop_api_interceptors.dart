@@ -67,7 +67,7 @@ class ShopAuthInterceptor extends Interceptor {
 
           // Retry the original request with the new token.
           err.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
-          final retryDio = Dio()..options = err.requestOptions.copyWith() as BaseOptions;
+          final retryDio = Dio();
           final retryResponse = await retryDio.fetch<dynamic>(err.requestOptions);
           return handler.resolve(retryResponse);
         }

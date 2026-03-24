@@ -16,7 +16,7 @@ class ShopSessionManager {
             const FlutterSecureStorage(
               aOptions: AndroidOptions(encryptedSharedPreferences: true),
               iOptions: IOSOptions(
-                accessibility: KeychainAccessibility.first_unlock,
+                accessibility: KeychainAccessibility.firstUnlock,
               ),
             );
 
