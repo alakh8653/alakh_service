@@ -23,7 +23,8 @@ export const initializeFirebase = (): admin.app.App | null => {
         privateKey: env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
         clientEmail: env.FIREBASE_CLIENT_EMAIL,
         clientId: env.FIREBASE_CLIENT_ID,
-        // @ts-expect-error firebase-admin type mismatch
+        // @ts-expect-error firebase-admin's ServiceAccount type does not include authUri/tokenUri
+        // but the underlying Google credential accepts them. Remove when @firebase/app-types is updated.
         authUri: env.FIREBASE_AUTH_URI,
         tokenUri: env.FIREBASE_TOKEN_URI,
       }),

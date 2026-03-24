@@ -27,7 +27,7 @@ export const boundingBox = (
   center: GeoCoordinates,
   radiusKm: number,
 ): { minLat: number; maxLat: number; minLng: number; maxLng: number } => {
-  const latDelta = radiusKm / EARTH_RADIUS_KM * (180 / Math.PI);
+  const latDelta = (radiusKm / EARTH_RADIUS_KM) * (180 / Math.PI);
   const lngDelta = latDelta / Math.cos(degreesToRadians(center.lat));
 
   return {
