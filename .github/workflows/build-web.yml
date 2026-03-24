@@ -76,7 +76,7 @@ jobs:
         run: flutter build web --dart-define=FLAVOR=production --release
 
       - name: Upload shop_web artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: shop-web-build
           path: apps/shop_web/build/web
@@ -141,7 +141,7 @@ jobs:
         run: flutter build web --dart-define=FLAVOR=production --release
 
       - name: Upload admin_web artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: admin-web-build
           path: apps/admin_web/build/web
