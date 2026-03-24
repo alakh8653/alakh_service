@@ -1,0 +1,59 @@
+# Dart / Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+build/
+pubspec.lock
+
+# Flutter web
+lib/generated_plugin_registrant.dart
+
+# Melos
+.melos_tool/
+melos_tool/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Node.js (backend)
+node_modules/
+dist/
+coverage/
+*.log
+npm-debug.log*
+
+# Prisma
+backend/prisma/*.db
+backend/prisma/*.db-journal
+
+# Docker
+.docker/
+
+# Secrets
+*.pem
+*.key
+*.p8
+google-services.json
+GoogleService-Info.plist

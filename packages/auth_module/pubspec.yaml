@@ -1,0 +1,21 @@
+name: auth_module
+description: Authentication service with JWT token management and secure storage for AlakhService apps.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: '>=3.10.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_secure_storage: ^9.0.0
+  jwt_decoder: ^2.0.1
+  api_client:
+    path: ../api_client
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0

@@ -1,0 +1,36 @@
+name: shop_web
+description: AlakhService shop-owner web dashboard.
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: '>=3.10.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.1.3
+  firebase_core: ^2.24.2
+  api_client:
+    path: ../../packages/api_client
+  auth_module:
+    path: ../../packages/auth_module
+  analytics_module:
+    path: ../../packages/analytics_module
+  realtime_client:
+    path: ../../packages/realtime_client
+  shared_models:
+    path: ../../packages/shared_models
+  shared_utils:
+    path: ../../packages/shared_utils
+  ui_kit:
+    path: ../../packages/ui_kit
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true

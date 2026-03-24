@@ -1,0 +1,44 @@
+name: alakh_service
+
+packages:
+  - apps/mobile_app
+  - apps/shop_web
+  - apps/admin_web
+  - packages/api_client
+  - packages/auth_module
+  - packages/notification_module
+  - packages/analytics_module
+  - packages/realtime_client
+  - packages/shared_models
+  - packages/shared_utils
+  - packages/ui_kit
+
+sdkPath: auto
+
+command:
+  version:
+    message: "chore: release version {new_package_version}"
+    branch: main
+
+scripts:
+  build:runner:
+    run: flutter pub run build_runner build --delete-conflicting-outputs
+    description: Run build_runner code generation for all packages
+    packageFilters:
+      dependsOn: build_runner
+
+  gen:l10n:
+    run: flutter gen-l10n
+    description: Generate Flutter localizations for all apps
+    packageFilters:
+      dirExists: lib/l10n
+
+  test:
+    run: flutter test --coverage
+    description: Run Flutter tests for all packages and apps
+    packageFilters:
+      dirExists: test
+
+  analyze:
+    run: flutter analyze
+    description: Run Flutter static analysis for all packages and apps
