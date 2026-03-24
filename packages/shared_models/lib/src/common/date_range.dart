@@ -43,9 +43,10 @@ class DateRange extends Equatable {
   bool contains(DateTime dateTime) =>
       !dateTime.isBefore(start) && !dateTime.isAfter(end);
 
-  /// Returns `true` if this range overlaps with [other].
+  /// Returns `true` if this range overlaps with [other], including ranges
+  /// that share an exact boundary point.
   bool overlaps(DateRange other) =>
-      start.isBefore(other.end) && end.isAfter(other.start);
+      !start.isAfter(other.end) && !end.isBefore(other.start);
 
   @override
   List<Object?> get props => [start, end];
