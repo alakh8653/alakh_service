@@ -125,7 +125,7 @@ jobs:
           flutter build appbundle --flavor production --dart-define=FLAVOR=production --release
 
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: android-apk-${{ github.event.inputs.flavor || 'production' }}
           path: apps/mobile_app/build/app/outputs/flutter-apk/*.apk
@@ -135,7 +135,7 @@ jobs:
         if: >
           github.event_name == 'push' ||
           github.event.inputs.flavor == 'production'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: android-aab-production
           path: apps/mobile_app/build/app/outputs/bundle/productionRelease/*.aab
@@ -200,7 +200,7 @@ jobs:
         run: flutter build ios --flavor production --dart-define=FLAVOR=production --no-codesign --release
 
       - name: Upload iOS artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ios-build-${{ github.event.inputs.flavor || 'production' }}
           path: apps/mobile_app/build/ios/iphoneos/Runner.app
