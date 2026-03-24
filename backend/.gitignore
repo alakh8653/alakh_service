@@ -8,3 +8,14 @@ yarn-error.log*
 .DS_Store
 coverage/
 .nyc_output/
+=======
+logs/
+*.log
+coverage/
+.nyc_output/
+.cache/
+.DS_Store
+Thumbs.db
+*.tsbuildinfo
+prisma/migrations/
+
