@@ -1,3 +1,4 @@
+import { randomInt } from 'crypto';
 import { redis } from '../../config/redis';
 import { env } from '../../config/env';
 
@@ -14,12 +15,8 @@ function otpAttemptsKey(identifier: string): string {
 }
 
 export function generateOTP(): string {
-  const digits = '0123456789';
-  let otp = '';
-  for (let i = 0; i < 6; i++) {
-    otp += digits[Math.floor(Math.random() * 10)];
-  }
-  return otp;
+  // Use cryptographically secure random integer in range [0, 999999]
+  return randomInt(0, 1_000_000).toString().padStart(6, '0');
 }
 
 export async function storeOTP(identifier: string, otp: string): Promise<void> {

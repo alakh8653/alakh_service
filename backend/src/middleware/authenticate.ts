@@ -26,13 +26,13 @@ export async function authenticate(
       throw new UnauthorizedError('Invalid token type');
     }
 
-    // Verify user still exists and is active
-    const user = await prisma.user.findFirst({
-      where: { id: payload.sub, isActive: true, deletedAt: null },
-      select: { id: true, email: true, role: true },
+    // Verify user still exists and is active (findUnique by primary key is indexed)
+    const user = await prisma.user.findUnique({
+      where: { id: payload.sub },
+      select: { id: true, email: true, role: true, isActive: true, deletedAt: true },
     });
 
-    if (!user) {
+    if (!user || !user.isActive || user.deletedAt !== null) {
       throw new UnauthorizedError('User account not found or inactive');
     }
 

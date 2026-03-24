@@ -8,7 +8,13 @@ const envSchema = z.object({
   PORT: z.string().default('3000').transform(Number),
   API_VERSION: z.string().default('v1'),
 
-  DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
+  DATABASE_URL: z
+    .string()
+    .min(1, 'DATABASE_URL is required')
+    .refine(
+      (url) => /^postgresql:\/\/.+/.test(url) || /^postgres:\/\/.+/.test(url),
+      'DATABASE_URL must be a valid PostgreSQL connection string',
+    ),
 
   REDIS_URL: z.string().default('redis://localhost:6379'),
 
