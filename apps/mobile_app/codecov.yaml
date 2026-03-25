@@ -1,0 +1,7 @@
+# Codecov configuration placeholder
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 1%
