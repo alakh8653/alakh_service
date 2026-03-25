@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 
 
+
+
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
 export const prisma =
@@ -53,6 +55,26 @@ declare global {
   var __prisma: PrismaClient | undefined;
 }
 
+
+/**
+ * Singleton Prisma client.
+ * Re-uses instance across hot reloads in development.
+ */
+const prisma =
+  global.__prisma ??
+  new PrismaClient({
+    log:
+      process.env.NODE_ENV === 'development'
+        ? ['query', 'warn', 'error']
+        : ['error'],
+  });
+
+if (process.env.NODE_ENV !== 'production') {
+  global.__prisma = prisma;
+}
+
+export default prisma;
+
 const createPrismaClient = () => {
   return new PrismaClient({
     log:
@@ -98,4 +120,5 @@ export const disconnectDatabase = async (): Promise<void> => {
   await prisma.$disconnect();
   logger.info('Database disconnected');
 };
+
 
