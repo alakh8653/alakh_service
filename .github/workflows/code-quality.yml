@@ -1,0 +1,245 @@
+name: Code Quality
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  FLUTTER_VERSION: "3.22.2"
+  PUB_CACHE: ${{ github.workspace }}/.pub-cache
+  COVERAGE_THRESHOLD: 70
+
+jobs:
+  # ============================================================
+  # Custom lint checks
+  # ============================================================
+  lint:
+    name: Lint & Static Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v5
+        with:
+          path: |
+            ${{ env.PUB_CACHE }}
+            ~/.pub-cache
+          key: pub-${{ runner.os }}-${{ hashFiles('**/pubspec.yaml', '**/pubspec.lock') }}
+          restore-keys: |
+            pub-${{ runner.os }}-
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install Melos
+        run: dart pub global activate melos
+
+      - name: Bootstrap workspace
+        run: melos bootstrap
+
+      - name: Run code generation
+        run: melos run build:runner
+
+      - name: Run flutter analyze
+        run: melos run analyze
+
+      - name: Check TODO count
+        id: todo_count
+        run: |
+          TODO_COUNT=$(grep -r "// TODO" --include="*.dart" \
+            --exclude-dir=".dart_tool" \
+            --exclude-dir="build" \
+            --exclude="*.g.dart" \
+            --exclude="*.freezed.dart" \
+            . | wc -l | tr -d ' ')
+          echo "count=$TODO_COUNT" >> $GITHUB_OUTPUT
+          echo "Found $TODO_COUNT TODO comments"
+          if [ "$TODO_COUNT" -gt 50 ]; then
+            echo "::warning::High TODO count ($TODO_COUNT). Consider addressing TODOs before merging."
+          fi
+
+      - name: Comment TODO count on PR
+        uses: actions/github-script@v8
+        if: github.event_name == 'pull_request'
+        with:
+          script: |
+            const todoCount = ${{ steps.todo_count.outputs.count }};
+            const emoji = todoCount > 50 ? '⚠️' : todoCount > 20 ? '📝' : '✅';
+            const body = `## Code Quality Report ${emoji}\n\n` +
+              `| Metric | Value |\n` +
+              `|--------|-------|\n` +
+              `| TODO comments | ${todoCount} |\n` +
+              (todoCount > 50 ? '\n> ⚠️ **Warning**: High TODO count. Consider addressing them before merging.\n' : '');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+  # ============================================================
+  # Coverage threshold check
+  # ============================================================
+  coverage:
+    name: Coverage Threshold
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v5
+        with:
+          path: |
+            ${{ env.PUB_CACHE }}
+            ~/.pub-cache
+          key: pub-${{ runner.os }}-${{ hashFiles('**/pubspec.yaml', '**/pubspec.lock') }}
+          restore-keys: |
+            pub-${{ runner.os }}-
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install Melos
+        run: dart pub global activate melos
+
+      - name: Install lcov
+        run: sudo apt-get install -y lcov
+
+      - name: Bootstrap workspace
+        run: melos bootstrap
+
+      - name: Run code generation
+        run: melos run build:runner
+
+      - name: Run tests with coverage
+        run: melos run test
+
+      - name: Merge coverage reports
+        run: |
+          find . -name "lcov.info" \
+            -not -path "*/.dart_tool/*" \
+            -not -path "*/build/*" \
+            -exec cat {} >> merged_lcov.info \;
+
+      - name: Check coverage threshold
+        run: |
+          COVERAGE=$(lcov --summary merged_lcov.info 2>&1 | \
+            grep "lines" | grep -oP '\d+\.\d+(?=%)' | head -1)
+          echo "Coverage: ${COVERAGE}%"
+          if (( $(echo "$COVERAGE < ${{ env.COVERAGE_THRESHOLD }}" | bc -l) )); then
+            echo "::error::Coverage ${COVERAGE}% is below threshold ${{ env.COVERAGE_THRESHOLD }}%"
+            exit 1
+          else
+            echo "::notice::Coverage ${COVERAGE}% meets threshold ${{ env.COVERAGE_THRESHOLD }}%"
+          fi
+
+      - name: Generate coverage report
+        run: |
+          genhtml merged_lcov.info --output-directory coverage_report \
+            --title "AlakhService Coverage" \
+            --legend --show-details
+
+      - name: Upload coverage HTML report
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-report
+          path: coverage_report
+          retention-days: 7
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: merged_lcov.info
+          fail_ci_if_error: false
+
+      - name: Comment coverage on PR
+        uses: actions/github-script@v8
+        if: github.event_name == 'pull_request'
+        with:
+          script: |
+            const { execSync } = require('child_process');
+            let coverage = 'N/A';
+            try {
+              const output = execSync(
+                'lcov --summary merged_lcov.info 2>&1 | grep "lines"'
+              ).toString();
+              const match = output.match(/(\d+\.\d+)%/);
+              if (match) coverage = match[1] + '%';
+            } catch (e) {}
+            const threshold = ${{ env.COVERAGE_THRESHOLD }};
+            const pct = parseFloat(coverage);
+            const passing = !isNaN(pct) && pct >= threshold;
+            const emoji = passing ? '✅' : '❌';
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## Test Coverage ${emoji}\n\n` +
+                `| Metric | Value |\n` +
+                `|--------|-------|\n` +
+                `| Coverage | ${coverage} |\n` +
+                `| Threshold | ${threshold}% |\n` +
+                `| Status | ${passing ? 'Passing ✅' : 'Failing ❌'} |\n`
+            });
+
+  # ============================================================
+  # Unused dependencies check
+  # ============================================================
+  unused-deps:
+    name: Unused Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v5
+        with:
+          path: |
+            ${{ env.PUB_CACHE }}
+            ~/.pub-cache
+          key: pub-${{ runner.os }}-${{ hashFiles('**/pubspec.yaml', '**/pubspec.lock') }}
+          restore-keys: |
+            pub-${{ runner.os }}-
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install Melos
+        run: dart pub global activate melos
+
+      - name: Install dependency_validator
+        run: dart pub global activate dependency_validator
+
+      - name: Bootstrap workspace
+        run: melos bootstrap
+
+      - name: Check for unused dependencies
+        run: |
+          melos exec -- dependency_validator || true
