@@ -1,8 +1,11 @@
 
+
+
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 // This is your Prisma schema file
 // Learn more about it at https://pris.ly/d/prisma-schema
+
 
 generator client {
   provider = "prisma-client-js"
@@ -12,6 +15,13 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+enum UserRole {
+  CUSTOMER
+  SHOP_OWNER
+  STAFF
+  ADMIN
 
 
 // ─────────────────────────────────────────
@@ -247,6 +257,7 @@ enum Role {
   ADMIN
   PROVIDER
   CUSTOMER
+
 }
 
 enum BookingStatus {
@@ -255,12 +266,229 @@ enum BookingStatus {
   IN_PROGRESS
   COMPLETED
   CANCELLED
+
+  NO_SHOW
+
   REJECTED
+
 }
 
 enum PaymentStatus {
   PENDING
   PAID
+
+  REFUNDED
+  FAILED
+}
+
+enum QueueEntryStatus {
+  WAITING
+  CALLED
+  SERVING
+  COMPLETED
+  SKIPPED
+  LEFT
+}
+
+enum DispatchStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  EN_ROUTE
+  ARRIVED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String?  @unique
+  phone         String?  @unique
+  name          String
+  role          UserRole @default(CUSTOMER)
+  passwordHash  String?
+  avatarUrl     String?
+  isVerified    Boolean  @default(false)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  bookings        Booking[]    @relation("CustomerBookings")
+  staffBookings   Booking[]    @relation("StaffBookings")
+  queueEntries    QueueEntry[]
+  dispatches      Dispatch[]   @relation("CustomerDispatches")
+  staffDispatches Dispatch[]   @relation("StaffDispatches")
+
+  @@map("users")
+}
+
+model Shop {
+  id          String   @id @default(cuid())
+  ownerId     String
+  name        String
+  description String?
+  address     String
+  city        String
+  latitude    Float?
+  longitude   Float?
+  phone       String?
+  email       String?
+  logoUrl     String?
+  isVerified  Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  services      Service[]
+  bookings      Booking[]
+  queueEntries  QueueEntry[]
+  queueSettings QueueSettings?
+  dispatches    Dispatch[]
+
+  @@map("shops")
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  shopId      String
+  name        String
+  description String?
+  price       Float
+  duration    Int
+  category    String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  shop         Shop         @relation(fields: [shopId], references: [id])
+  bookings     Booking[]
+  queueEntries QueueEntry[]
+
+  @@map("services")
+}
+
+model Booking {
+  id                 String        @id @default(cuid())
+  customerId         String
+  shopId             String
+  serviceId          String
+  staffId            String?
+  status             BookingStatus @default(PENDING)
+  paymentStatus      PaymentStatus @default(PENDING)
+  scheduledDate      DateTime
+  scheduledTime      String
+  startedAt          DateTime?
+  completedAt        DateTime?
+  totalPrice         Float
+  notes              String?
+  cancellationReason String?
+  cancelledAt        DateTime?
+  noShowAt           DateTime?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  customer User     @relation("CustomerBookings", fields: [customerId], references: [id])
+  shop     Shop     @relation(fields: [shopId], references: [id])
+  service  Service  @relation(fields: [serviceId], references: [id])
+  staff    User?    @relation("StaffBookings", fields: [staffId], references: [id])
+  dispatch Dispatch?
+
+  @@index([customerId])
+  @@index([shopId])
+  @@index([scheduledDate])
+  @@index([status])
+  @@map("bookings")
+}
+
+model QueueEntry {
+  id          String           @id @default(cuid())
+  shopId      String
+  userId      String
+  serviceId   String?
+  status      QueueEntryStatus @default(WAITING)
+  position    Int
+  calledAt    DateTime?
+  servedAt    DateTime?
+  completedAt DateTime?
+  joinedAt    DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  shop    Shop     @relation(fields: [shopId], references: [id])
+  user    User     @relation(fields: [userId], references: [id])
+  service Service? @relation(fields: [serviceId], references: [id])
+
+  @@index([shopId, status])
+  @@index([userId])
+  @@map("queue_entries")
+}
+
+model QueueSettings {
+  id                   String   @id @default(cuid())
+  shopId               String   @unique
+  isActive             Boolean  @default(true)
+  maxCapacity          Int      @default(50)
+  autoAccept           Boolean  @default(true)
+  estimatedServiceTime Int      @default(15)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  shop Shop @relation(fields: [shopId], references: [id])
+
+  @@map("queue_settings")
+}
+
+model Dispatch {
+  id                   String         @id @default(cuid())
+  bookingId            String         @unique
+  staffId              String
+  customerId           String
+  shopId               String
+  status               DispatchStatus @default(PENDING)
+  assignedAt           DateTime       @default(now())
+  acceptedAt           DateTime?
+  startedAt            DateTime?
+  arrivedAt            DateTime?
+  completedAt          DateTime?
+  cancelledAt          DateTime?
+  staffLatitude        Float?
+  staffLongitude       Float?
+  destinationLatitude  Float?
+  destinationLongitude Float?
+  estimatedArrival     DateTime?
+  actualDuration       Int?
+  rejectionReason      String?
+  cancellationReason   String?
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+
+  booking         Booking           @relation(fields: [bookingId], references: [id])
+  staff           User              @relation("StaffDispatches", fields: [staffId], references: [id])
+  customer        User              @relation("CustomerDispatches", fields: [customerId], references: [id])
+  shop            Shop              @relation(fields: [shopId], references: [id])
+  locationHistory LocationHistory[]
+
+  @@index([shopId])
+  @@index([staffId])
+  @@index([customerId])
+  @@map("dispatches")
+}
+
+model LocationHistory {
+  id         String   @id @default(cuid())
+  dispatchId String
+  latitude   Float
+  longitude  Float
+  heading    Float?
+  speed      Float?
+  accuracy   Float?
+  recordedAt DateTime @default(now())
+
+  dispatch Dispatch @relation(fields: [dispatchId], references: [id])
+
+  @@index([dispatchId])
+  @@map("location_history")
+
   FAILED
   REFUNDED
   PARTIALLY_REFUNDED
@@ -813,4 +1041,5 @@ model PromoCode {
   @@index([code])
   @@index([isActive, validFrom, validUntil])
   @@map("promo_codes")
+
 }

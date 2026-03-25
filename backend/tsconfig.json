@@ -5,9 +5,15 @@
     "module": "commonjs",
     "lib": ["ES2020"],
 
+
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+
     "target": "ES2022",
     "module": "commonjs",
     "lib": ["ES2022"],
+
 
     "outDir": "./dist",
     "rootDir": "./src",
@@ -20,14 +26,23 @@
     "declarationMap": true,
     "sourceMap": true,
 
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+
+
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "paths": {
       "@/*": ["./src/*"]
+
     }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
+
+}
+
     "removeComments": false,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -52,3 +67,4 @@
   "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
 
 }
+
