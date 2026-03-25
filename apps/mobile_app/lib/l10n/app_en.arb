@@ -1,0 +1,506 @@
+{
+  "@@locale": "en",
+  "@@last_modified": "2024-01-01T00:00:00.000Z",
+
+  "appName": "AlakhService",
+  "@appName": { "description": "The name of the application." },
+
+  "appTagline": "Services at your doorstep",
+  "@appTagline": { "description": "Short marketing tagline." },
+
+  "ok": "OK",
+  "@ok": { "description": "Generic OK label." },
+
+  "cancel": "Cancel",
+  "@cancel": { "description": "Generic cancel label." },
+
+  "confirm": "Confirm",
+  "@confirm": { "description": "Generic confirm label." },
+
+  "save": "Save",
+  "@save": { "description": "Generic save label." },
+
+  "delete": "Delete",
+  "@delete": { "description": "Generic delete label." },
+
+  "edit": "Edit",
+  "@edit": { "description": "Generic edit label." },
+
+  "retry": "Retry",
+  "@retry": { "description": "Retry action label." },
+
+  "close": "Close",
+  "@close": { "description": "Close action label." },
+
+  "back": "Back",
+  "@back": { "description": "Navigate back label." },
+
+  "next": "Next",
+  "@next": { "description": "Navigate to next step." },
+
+  "submit": "Submit",
+  "@submit": { "description": "Submit form label." },
+
+  "search": "Search",
+  "@search": { "description": "Search action label." },
+
+  "filter": "Filter",
+  "@filter": { "description": "Filter action label." },
+
+  "sort": "Sort",
+  "@sort": { "description": "Sort action label." },
+
+  "loading": "Loading…",
+  "@loading": { "description": "Generic loading message." },
+
+  "noResultsFound": "No results found",
+  "@noResultsFound": { "description": "Empty state message." },
+
+  "somethingWentWrong": "Something went wrong. Please try again.",
+  "@somethingWentWrong": { "description": "Generic error message." },
+
+  "noInternetConnection": "No internet connection. Please check your network.",
+  "@noInternetConnection": { "description": "No connectivity error message." },
+
+  "sessionExpired": "Your session has expired. Please log in again.",
+  "@sessionExpired": { "description": "Session expiry message." },
+
+  "requiredField": "This field is required.",
+  "@requiredField": { "description": "Validation: required field." },
+
+  "invalidEmail": "Please enter a valid email address.",
+  "@invalidEmail": { "description": "Validation: invalid email." },
+
+  "invalidPhone": "Please enter a valid phone number.",
+  "@invalidPhone": { "description": "Validation: invalid phone." },
+
+  "passwordTooShort": "Password must be at least {minLength} characters.",
+  "@passwordTooShort": {
+    "description": "Validation: password too short.",
+    "placeholders": {
+      "minLength": { "type": "int", "example": "8" }
+    }
+  },
+
+  "passwordsDoNotMatch": "Passwords do not match.",
+  "@passwordsDoNotMatch": { "description": "Validation: passwords don't match." },
+
+  "loginTitle": "Welcome back",
+  "@loginTitle": { "description": "Login screen title." },
+
+  "loginSubtitle": "Sign in to continue",
+  "@loginSubtitle": { "description": "Login screen subtitle." },
+
+  "emailLabel": "Email",
+  "@emailLabel": { "description": "Email field label." },
+
+  "emailHint": "you@example.com",
+  "@emailHint": { "description": "Email field hint." },
+
+  "phoneLabel": "Phone number",
+  "@phoneLabel": { "description": "Phone field label." },
+
+  "phoneHint": "+91 98765 43210",
+  "@phoneHint": { "description": "Phone field hint." },
+
+  "passwordLabel": "Password",
+  "@passwordLabel": { "description": "Password field label." },
+
+  "passwordHint": "Enter your password",
+  "@passwordHint": { "description": "Password field hint." },
+
+  "confirmPasswordLabel": "Confirm password",
+  "@confirmPasswordLabel": { "description": "Confirm password field label." },
+
+  "forgotPassword": "Forgot password?",
+  "@forgotPassword": { "description": "Forgot password link label." },
+
+  "signIn": "Sign In",
+  "@signIn": { "description": "Sign-in button label." },
+
+  "signOut": "Sign Out",
+  "@signOut": { "description": "Sign-out button label." },
+
+  "signUp": "Sign Up",
+  "@signUp": { "description": "Sign-up button label." },
+
+  "createAccount": "Create Account",
+  "@createAccount": { "description": "Create account button label." },
+
+  "alreadyHaveAccount": "Already have an account? {action}",
+  "@alreadyHaveAccount": {
+    "description": "Prompt for users who already have an account.",
+    "placeholders": {
+      "action": { "type": "String", "example": "Sign In" }
+    }
+  },
+
+  "dontHaveAccount": "Don't have an account? {action}",
+  "@dontHaveAccount": {
+    "description": "Prompt for new users.",
+    "placeholders": {
+      "action": { "type": "String", "example": "Sign Up" }
+    }
+  },
+
+  "otpVerification": "OTP Verification",
+  "@otpVerification": { "description": "OTP verification screen title." },
+
+  "otpSentTo": "We sent a verification code to {destination}",
+  "@otpSentTo": {
+    "description": "OTP sent confirmation.",
+    "placeholders": {
+      "destination": { "type": "String", "example": "+91 98765 43210" }
+    }
+  },
+
+  "otpHint": "Enter 6-digit code",
+  "@otpHint": { "description": "OTP input hint." },
+
+  "resendOtp": "Resend OTP",
+  "@resendOtp": { "description": "Resend OTP button label." },
+
+  "resendOtpIn": "Resend in {seconds}s",
+  "@resendOtpIn": {
+    "description": "Countdown until OTP can be resent.",
+    "placeholders": {
+      "seconds": { "type": "int", "example": "30" }
+    }
+  },
+
+  "verifyOtp": "Verify",
+  "@verifyOtp": { "description": "Verify OTP button label." },
+
+  "onboardingWelcomeTitle": "Book services in minutes",
+  "@onboardingWelcomeTitle": { "description": "Onboarding slide 1 title." },
+
+  "onboardingWelcomeBody": "Find trusted professionals near you for any home or personal service.",
+  "@onboardingWelcomeBody": { "description": "Onboarding slide 1 body." },
+
+  "onboardingTrackTitle": "Track in real time",
+  "@onboardingTrackTitle": { "description": "Onboarding slide 2 title." },
+
+  "onboardingTrackBody": "Know exactly where your service provider is and when they will arrive.",
+  "@onboardingTrackBody": { "description": "Onboarding slide 2 body." },
+
+  "onboardingPayTitle": "Pay securely",
+  "@onboardingPayTitle": { "description": "Onboarding slide 3 title." },
+
+  "onboardingPayBody": "Multiple payment options — UPI, cards, wallet, and cash on delivery.",
+  "@onboardingPayBody": { "description": "Onboarding slide 3 body." },
+
+  "getStarted": "Get Started",
+  "@getStarted": { "description": "Get-started CTA label." },
+
+  "skip": "Skip",
+  "@skip": { "description": "Skip onboarding label." },
+
+  "homeTitle": "Home",
+  "@homeTitle": { "description": "Home screen title." },
+
+  "searchServices": "What service do you need?",
+  "@searchServices": { "description": "Home search placeholder." },
+
+  "popularServices": "Popular Services",
+  "@popularServices": { "description": "Popular services section heading." },
+
+  "nearbyProviders": "Nearby Providers",
+  "@nearbyProviders": { "description": "Nearby providers section heading." },
+
+  "seeAll": "See all",
+  "@seeAll": { "description": "See-all link label." },
+
+  "bookingTitle": "Book a Service",
+  "@bookingTitle": { "description": "Booking screen title." },
+
+  "bookingSelectDate": "Select Date",
+  "@bookingSelectDate": { "description": "Date picker label in booking." },
+
+  "bookingSelectTime": "Select Time Slot",
+  "@bookingSelectTime": { "description": "Time slot label in booking." },
+
+  "bookingAddNotes": "Add Notes (optional)",
+  "@bookingAddNotes": { "description": "Notes field label in booking." },
+
+  "bookingConfirm": "Confirm Booking",
+  "@bookingConfirm": { "description": "Confirm booking button label." },
+
+  "bookingSuccessTitle": "Booking Confirmed!",
+  "@bookingSuccessTitle": { "description": "Booking success heading." },
+
+  "bookingSuccessBody": "Your booking #{bookingId} has been confirmed.",
+  "@bookingSuccessBody": {
+    "description": "Booking success message.",
+    "placeholders": {
+      "bookingId": { "type": "String", "example": "BK-1234" }
+    }
+  },
+
+  "myBookings": "My Bookings",
+  "@myBookings": { "description": "My bookings screen title." },
+
+  "bookingStatus_pending": "Pending",
+  "@bookingStatus_pending": { "description": "Booking status: pending." },
+
+  "bookingStatus_confirmed": "Confirmed",
+  "@bookingStatus_confirmed": { "description": "Booking status: confirmed." },
+
+  "bookingStatus_inProgress": "In Progress",
+  "@bookingStatus_inProgress": { "description": "Booking status: in-progress." },
+
+  "bookingStatus_completed": "Completed",
+  "@bookingStatus_completed": { "description": "Booking status: completed." },
+
+  "bookingStatus_cancelled": "Cancelled",
+  "@bookingStatus_cancelled": { "description": "Booking status: cancelled." },
+
+  "cancelBooking": "Cancel Booking",
+  "@cancelBooking": { "description": "Cancel booking button label." },
+
+  "cancelBookingConfirm": "Are you sure you want to cancel this booking?",
+  "@cancelBookingConfirm": { "description": "Cancel booking confirmation dialog." },
+
+  "queueTitle": "Queue",
+  "@queueTitle": { "description": "Queue screen title." },
+
+  "queuePosition": "Your position: {position}",
+  "@queuePosition": {
+    "description": "Queue position indicator.",
+    "placeholders": {
+      "position": { "type": "int", "example": "3" }
+    }
+  },
+
+  "estimatedWait": "Estimated wait: {duration}",
+  "@estimatedWait": {
+    "description": "Estimated wait time.",
+    "placeholders": {
+      "duration": { "type": "String", "example": "15 min" }
+    }
+  },
+
+  "joinQueue": "Join Queue",
+  "@joinQueue": { "description": "Join queue button." },
+
+  "leaveQueue": "Leave Queue",
+  "@leaveQueue": { "description": "Leave queue button." },
+
+  "trackingTitle": "Track Service",
+  "@trackingTitle": { "description": "Tracking screen title." },
+
+  "providerOnTheWay": "Your provider is on the way",
+  "@providerOnTheWay": { "description": "Provider en-route status." },
+
+  "estimatedArrival": "Estimated arrival: {eta}",
+  "@estimatedArrival": {
+    "description": "ETA label on tracking screen.",
+    "placeholders": {
+      "eta": { "type": "String", "example": "10 min" }
+    }
+  },
+
+  "callProvider": "Call Provider",
+  "@callProvider": { "description": "Call provider button." },
+
+  "paymentTitle": "Payment",
+  "@paymentTitle": { "description": "Payment screen title." },
+
+  "paymentAmount": "Amount: {amount}",
+  "@paymentAmount": {
+    "description": "Payment amount label.",
+    "placeholders": {
+      "amount": { "type": "String", "example": "₹499" }
+    }
+  },
+
+  "paymentMethod": "Payment Method",
+  "@paymentMethod": { "description": "Payment method section label." },
+
+  "paymentMethod_upi": "UPI",
+  "@paymentMethod_upi": { "description": "UPI payment method." },
+
+  "paymentMethod_card": "Credit / Debit Card",
+  "@paymentMethod_card": { "description": "Card payment method." },
+
+  "paymentMethod_wallet": "AlakhService Wallet",
+  "@paymentMethod_wallet": { "description": "Wallet payment method." },
+
+  "paymentMethod_cash": "Cash on Delivery",
+  "@paymentMethod_cash": { "description": "COD payment method." },
+
+  "payNow": "Pay Now",
+  "@payNow": { "description": "Pay now button." },
+
+  "paymentSuccess": "Payment Successful!",
+  "@paymentSuccess": { "description": "Payment success message." },
+
+  "paymentFailed": "Payment Failed. Please try again.",
+  "@paymentFailed": { "description": "Payment failure message." },
+
+  "walletBalance": "Wallet Balance: {balance}",
+  "@walletBalance": {
+    "description": "Wallet balance label.",
+    "placeholders": {
+      "balance": { "type": "String", "example": "₹250.00" }
+    }
+  },
+
+  "transactionHistory": "Transaction History",
+  "@transactionHistory": { "description": "Transaction history screen title." },
+
+  "profileTitle": "My Profile",
+  "@profileTitle": { "description": "Profile screen title." },
+
+  "editProfile": "Edit Profile",
+  "@editProfile": { "description": "Edit profile button." },
+
+  "fullName": "Full Name",
+  "@fullName": { "description": "Full name field label." },
+
+  "dateOfBirth": "Date of Birth",
+  "@dateOfBirth": { "description": "DOB field label." },
+
+  "gender": "Gender",
+  "@gender": { "description": "Gender field label." },
+
+  "myAddresses": "My Addresses",
+  "@myAddresses": { "description": "Addresses section label." },
+
+  "addAddress": "Add Address",
+  "@addAddress": { "description": "Add address button." },
+
+  "settingsTitle": "Settings",
+  "@settingsTitle": { "description": "Settings screen title." },
+
+  "settingsLanguage": "Language",
+  "@settingsLanguage": { "description": "Language setting label." },
+
+  "settingsTheme": "Theme",
+  "@settingsTheme": { "description": "Theme setting label." },
+
+  "settingsTheme_system": "System Default",
+  "@settingsTheme_system": { "description": "System default theme option." },
+
+  "settingsTheme_light": "Light",
+  "@settingsTheme_light": { "description": "Light theme option." },
+
+  "settingsTheme_dark": "Dark",
+  "@settingsTheme_dark": { "description": "Dark theme option." },
+
+  "settingsNotifications": "Notifications",
+  "@settingsNotifications": { "description": "Notifications settings section." },
+
+  "settingsPrivacy": "Privacy & Security",
+  "@settingsPrivacy": { "description": "Privacy settings section." },
+
+  "settingsBiometric": "Biometric Login",
+  "@settingsBiometric": { "description": "Biometric login toggle." },
+
+  "settingsClearCache": "Clear Cache",
+  "@settingsClearCache": { "description": "Clear cache option." },
+
+  "settingsDeleteAccount": "Delete Account",
+  "@settingsDeleteAccount": { "description": "Delete account option." },
+
+  "settingsDeleteAccountConfirm": "Are you sure you want to permanently delete your account? This action cannot be undone.",
+  "@settingsDeleteAccountConfirm": { "description": "Delete account confirmation." },
+
+  "notificationsTitle": "Notifications",
+  "@notificationsTitle": { "description": "Notifications screen title." },
+
+  "notificationMarkAllRead": "Mark all as read",
+  "@notificationMarkAllRead": { "description": "Mark all notifications read label." },
+
+  "noNotifications": "You're all caught up!",
+  "@noNotifications": { "description": "Empty notifications state." },
+
+  "reviewTitle": "Write a Review",
+  "@reviewTitle": { "description": "Review screen title." },
+
+  "reviewRating": "Rate your experience",
+  "@reviewRating": { "description": "Review rating label." },
+
+  "reviewComment": "Comments (optional)",
+  "@reviewComment": { "description": "Review comments label." },
+
+  "submitReview": "Submit Review",
+  "@submitReview": { "description": "Submit review button." },
+
+  "reviewThankYou": "Thank you for your review!",
+  "@reviewThankYou": { "description": "Review submitted confirmation." },
+
+  "disputeTitle": "Raise a Dispute",
+  "@disputeTitle": { "description": "Dispute screen title." },
+
+  "disputeReason": "Reason",
+  "@disputeReason": { "description": "Dispute reason field label." },
+
+  "disputeDescription": "Describe the issue",
+  "@disputeDescription": { "description": "Dispute description field label." },
+
+  "submitDispute": "Submit Dispute",
+  "@submitDispute": { "description": "Submit dispute button." },
+
+  "referralTitle": "Refer & Earn",
+  "@referralTitle": { "description": "Referral screen title." },
+
+  "referralCode": "Your Referral Code",
+  "@referralCode": { "description": "Referral code label." },
+
+  "referralShare": "Share with friends",
+  "@referralShare": { "description": "Share referral button." },
+
+  "referralEarned": "{count,plural, =1{You've referred 1 friend!} other{You've referred {count} friends!}}",
+  "@referralEarned": {
+    "description": "Referral count message with plural support.",
+    "placeholders": {
+      "count": { "type": "num", "format": "compact" }
+    }
+  },
+
+  "chatTitle": "Messages",
+  "@chatTitle": { "description": "Chat screen title." },
+
+  "chatTypePlaceholder": "Type a message…",
+  "@chatTypePlaceholder": { "description": "Chat input placeholder." },
+
+  "chatSend": "Send",
+  "@chatSend": { "description": "Send message button." },
+
+  "staffModeTitle": "Staff Dashboard",
+  "@staffModeTitle": { "description": "Staff mode screen title." },
+
+  "staffAvailable": "Available",
+  "@staffAvailable": { "description": "Staff availability: available." },
+
+  "staffUnavailable": "Unavailable",
+  "@staffUnavailable": { "description": "Staff availability: unavailable." },
+
+  "staffTodayEarnings": "Today's Earnings: {amount}",
+  "@staffTodayEarnings": {
+    "description": "Today's earnings label for staff.",
+    "placeholders": {
+      "amount": { "type": "String", "example": "₹1,200" }
+    }
+  },
+
+  "staffJobsCompleted": "{count,plural, =1{1 job completed} other{{count} jobs completed}}",
+  "@staffJobsCompleted": {
+    "description": "Staff jobs completed count.",
+    "placeholders": {
+      "count": { "type": "num", "format": "compact" }
+    }
+  },
+
+  "errorNotFound": "Page not found",
+  "@errorNotFound": { "description": "404 error message." },
+
+  "errorUnauthorized": "You are not authorized to access this resource.",
+  "@errorUnauthorized": { "description": "401 error message." },
+
+  "errorServerError": "A server error occurred. Please try again later.",
+  "@errorServerError": { "description": "500 error message." },
+
+  "errorTimeout": "The request timed out. Please check your connection.",
+  "@errorTimeout": { "description": "Timeout error message." }
+}

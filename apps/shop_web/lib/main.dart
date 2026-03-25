@@ -1,3 +1,4 @@
+
 /// Application entry point for the Shop Web dashboard.
 library;
 
@@ -53,4 +54,8 @@ Future<void> main() async {
       _log.e('Unhandled zone error', error: error, stackTrace: stack);
     },
   );
+
+void main() {
+  // TODO: Implement entry point
+
 }

@@ -1,0 +1,192 @@
+{
+  "@@locale": "en",
+
+  "save": "Save",
+  "@save": { "description": "Save action" },
+
+  "cancel": "Cancel",
+  "@cancel": { "description": "Cancel action" },
+
+  "delete": "Delete",
+  "@delete": { "description": "Delete action" },
+
+  "edit": "Edit",
+  "@edit": { "description": "Edit action" },
+
+  "create": "Create",
+  "@create": { "description": "Create action" },
+
+  "search": "Search",
+  "@search": { "description": "Search action" },
+
+  "filter": "Filter",
+  "@filter": { "description": "Filter action" },
+
+  "loading": "Loading...",
+  "@loading": { "description": "Loading state" },
+
+  "error": "Error",
+  "@error": { "description": "Error label" },
+
+  "noData": "No data available",
+  "@noData": { "description": "No data state" },
+
+  "confirm": "Confirm",
+  "@confirm": { "description": "Confirm action" },
+
+  "back": "Back",
+  "@back": { "description": "Back navigation" },
+
+  "next": "Next",
+  "@next": { "description": "Next navigation" },
+
+  "previous": "Previous",
+  "@previous": { "description": "Previous navigation" },
+
+  "refresh": "Refresh",
+  "@refresh": { "description": "Refresh action" },
+
+  "export": "Export",
+  "@export": { "description": "Export action" },
+
+  "view": "View",
+  "@view": { "description": "View action" },
+
+  "approve": "Approve",
+  "@approve": { "description": "Approve action" },
+
+  "reject": "Reject",
+  "@reject": { "description": "Reject action" },
+
+  "resolve": "Resolve",
+  "@resolve": { "description": "Resolve action" },
+
+  "refund": "Refund",
+  "@refund": { "description": "Refund action" },
+
+  "login": "Login",
+  "@login": { "description": "Login action" },
+
+  "logout": "Logout",
+  "@logout": { "description": "Logout action" },
+
+  "email": "Email",
+  "@email": { "description": "Email field label" },
+
+  "password": "Password",
+  "@password": { "description": "Password field label" },
+
+  "loginTitle": "Admin Sign In",
+  "@loginTitle": { "description": "Login page title" },
+
+  "loginSubtitle": "Alakh Service Platform Administration",
+  "@loginSubtitle": { "description": "Login page subtitle" },
+
+  "emailHint": "Enter your admin email",
+  "@emailHint": { "description": "Email input hint" },
+
+  "passwordHint": "Enter your password",
+  "@passwordHint": { "description": "Password input hint" },
+
+  "dashboard": "Dashboard",
+  "@dashboard": { "description": "Dashboard navigation label" },
+
+  "cities": "Cities",
+  "@cities": { "description": "Cities navigation label" },
+
+  "shops": "Shops",
+  "@shops": { "description": "Shops navigation label" },
+
+  "disputes": "Disputes",
+  "@disputes": { "description": "Disputes navigation label" },
+
+  "fraud": "Fraud Monitoring",
+  "@fraud": { "description": "Fraud monitoring navigation label" },
+
+  "payments": "Payments",
+  "@payments": { "description": "Payments navigation label" },
+
+  "trust": "Trust Engine",
+  "@trust": { "description": "Trust engine navigation label" },
+
+  "auditLogs": "Audit Logs",
+  "@auditLogs": { "description": "Audit logs navigation label" },
+
+  "analytics": "Analytics",
+  "@analytics": { "description": "Analytics navigation label" },
+
+  "systemHealth": "System Health",
+  "@systemHealth": { "description": "System health navigation label" },
+
+  "cityName": "City Name",
+  "@cityName": { "description": "City name field" },
+
+  "cityState": "State",
+  "@cityState": { "description": "City state field" },
+
+  "cityCountry": "Country",
+  "@cityCountry": { "description": "City country field" },
+
+  "createCity": "Create City",
+  "@createCity": { "description": "Create city action" },
+
+  "editCity": "Edit City",
+  "@editCity": { "description": "Edit city action" },
+
+  "deleteCity": "Delete City",
+  "@deleteCity": { "description": "Delete city action" },
+
+  "cityCreatedSuccess": "City created successfully",
+  "@cityCreatedSuccess": { "description": "City creation success message" },
+
+  "cityUpdatedSuccess": "City updated successfully",
+  "@cityUpdatedSuccess": { "description": "City update success message" },
+
+  "cityDeletedSuccess": "City deleted successfully",
+  "@cityDeletedSuccess": { "description": "City deletion success message" },
+
+  "shopName": "Shop Name",
+  "@shopName": { "description": "Shop name field" },
+
+  "shopOwner": "Owner",
+  "@shopOwner": { "description": "Shop owner field" },
+
+  "shopCategory": "Category",
+  "@shopCategory": { "description": "Shop category field" },
+
+  "pendingApproval": "Pending Approval",
+  "@pendingApproval": { "description": "Pending approval label" },
+
+  "approveShop": "Approve Shop",
+  "@approveShop": { "description": "Approve shop action" },
+
+  "rejectShop": "Reject Shop",
+  "@rejectShop": { "description": "Reject shop action" },
+
+  "shopApprovedSuccess": "Shop approved successfully",
+  "@shopApprovedSuccess": { "description": "Shop approval success message" },
+
+  "shopRejectedSuccess": "Shop rejected",
+  "@shopRejectedSuccess": { "description": "Shop rejection message" },
+
+  "active": "Active",
+  "@active": { "description": "Active status label" },
+
+  "inactive": "Inactive",
+  "@inactive": { "description": "Inactive status label" },
+
+  "pending": "Pending",
+  "@pending": { "description": "Pending status label" },
+
+  "approved": "Approved",
+  "@approved": { "description": "Approved status label" },
+
+  "rejected": "Rejected",
+  "@rejected": { "description": "Rejected status label" },
+
+  "flagged": "Flagged",
+  "@flagged": { "description": "Flagged status label" },
+
+  "resolved": "Resolved",
+  "@resolved": { "description": "Resolved status label" }
+}
